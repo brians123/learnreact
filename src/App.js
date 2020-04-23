@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import Sidebar from "react-sidebar";
 
 // rbx styling
 import "rbx/index.css";
 import { Navbar, Button, Column} from "rbx";
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 // Components
 import Product from './components/Product';
 
 const App = () => {
   const [data, setData] = useState({});
+  const [sidebarStatus, setSidebarStatus] = useState(false);
   const products = Object.values(data);
+
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await fetch('./data/products.json');
@@ -19,6 +23,10 @@ const App = () => {
     };
     fetchProducts();
   }, []);
+
+  const handleSidebarOpen = () => (
+    setSidebarStatus(true)
+  );
 
   return (
    <div>
@@ -62,8 +70,14 @@ const App = () => {
         </Button.Group>
       </Navbar.Item>
     </Navbar.Segment>
+    <ShoppingCartIcon/>
   </Navbar.Menu>
-     </Navbar>
+  <Sidebar
+    sidebar={<b>Sidebar content</b>}
+    open={sidebarStatus}
+    onSetOpen={handleSidebarOpen}
+    styles={{ sidebar: { background: "white" } }}/>
+    </Navbar>
     
     <Column.Group vcentered multiline>
 
