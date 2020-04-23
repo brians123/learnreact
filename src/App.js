@@ -5,14 +5,15 @@ import Sidebar from "react-sidebar";
 // rbx styling
 import "rbx/index.css";
 import { Navbar, Button, Column} from "rbx";
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import IconButton from '@material-ui/core/IconButton';
 
 // Components
 import Product from './components/Product';
 
 const App = () => {
   const [data, setData] = useState({});
-  const [sidebarStatus, setSidebarStatus] = useState(false);
+  const [cart, setCart] = useState(false);
   const products = Object.values(data);
 
   useEffect(() => {
@@ -24,12 +25,18 @@ const App = () => {
     fetchProducts();
   }, []);
 
-  const handleSidebarOpen = () => (
-    setSidebarStatus(true)
-  );
+  const toggleCart = () =>{
+    if (cart){
+      setCart(false);
+    }
+    else{
+      setCart(true);
+    }
+  }
 
   return (
    <div>
+      
      <Navbar color="light">
      <Navbar.Brand>
     <Navbar.Item href="#">
@@ -70,14 +77,20 @@ const App = () => {
         </Button.Group>
       </Navbar.Item>
     </Navbar.Segment>
-    <ShoppingCartIcon/>
+    <IconButton onClick={()=>{toggleCart()}}>
+      <AddShoppingCartIcon color="primary" aria-label="add to shopping cart"/>
+    </IconButton>
+    
   </Navbar.Menu>
-  <Sidebar
-    sidebar={<b>Sidebar content</b>}
-    open={sidebarStatus}
-    onSetOpen={handleSidebarOpen}
-    styles={{ sidebar: { background: "white" } }}/>
+ 
     </Navbar>
+    <Sidebar
+    sidebar={<b>Sidebar content</b>}
+    open={cart}
+    onClose={()=>{toggleCart()}}
+    styles={{ sidebar: { background: "white" } }} >
+      
+    </Sidebar>
     
     <Column.Group vcentered multiline>
 
@@ -91,7 +104,8 @@ const App = () => {
         sku = {product.sku}
         title = {product.title}
         description = {product.description}
-        price = {product.price}/>
+        price = {product.price}
+        addToCart = {toggleCart}/>
         </Column>)}
     </Column.Group>
     </div>

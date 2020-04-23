@@ -34,6 +34,10 @@ const Product = (props) => {
             </Button>
             )}
         </Button.Group>
+        <Button
+            onClick = {props.addToCart}>
+            Add To Cart
+        </Button>
         </Card.Content>
     </Card>
     )  
