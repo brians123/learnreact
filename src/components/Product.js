@@ -1,8 +1,27 @@
-import React from 'react';
+import React, { useContext,useState } from 'react';
+
+// rbx styling
 import { Card, Image, Media, Title, Content, Button } from "rbx";
 
+// Cart Context
+import CartProvider from './Context';
+import {CartContext} from './Context'
+
+
 const Product = (props) => {
+    const [cart,setCart] = useContext(CartContext);
+
     const sizes = ['XS','S','M','L']
+
+    const addToCart = () =>{
+        const tshirt = {
+            name: props.title, 
+            price: props.price,
+            
+        }
+        setCart(prevState => [...prevState, tshirt])
+        
+    }
 
     return(
     <Card>
@@ -35,7 +54,7 @@ const Product = (props) => {
             )}
         </Button.Group>
         <Button
-            onClick = {props.addToCart}>
+            onClick = {()=> {props.addToCart(); addToCart()}}>
             Add To Cart
         </Button>
         </Card.Content>
