@@ -8,19 +8,26 @@ import CartProvider from './Context';
 import {CartContext} from './Context'
 
 
-const Product = (props) => {
+const ProductInCart = (props) => {
     const [cart,setCart] = useContext(CartContext);
 
     const sizes = ['XS','S','M','L']
 
-    const addToCart = () =>{
-        const tshirt = {
-            name: props.title, 
-            price: props.price,
-        }
-        setCart(prevState => [...prevState, tshirt])
+    // const addToCart = () =>{
+    //     const tshirt = {
+    //         name: props.title, 
+    //         price: props.price,
+            
+    //     }
+    //     setCart(prevState => [...prevState, tshirt])
         
-    }
+    // }
+
+    // const deleteFromCart = (index) => () =>{
+    //     const tempItems = [...cart].filter((s,sidx) => index !== sidx)
+    //     console.log(tempItems);
+    //     setCart(prevCart => ({prevCart, tempItems}))
+    // }
 
     return(
     <Card>
@@ -40,25 +47,24 @@ const Product = (props) => {
                 </Title>
                 </Media.Item>
             </Media>
-        <Content>
-            {props.description}
-            <br />
-        </Content>
-        <Button.Group >
+
+        {/* <Button.Group >
             {sizes.map(size=>
             <Button 
                 rounded >
                 {size}
             </Button>
             )}
-        </Button.Group>
+        </Button.Group> */}
+
         <Button
-            onClick = {()=> {props.addToCart(); addToCart()}}>
-            Add To Cart
+            onClick = {()=>{props.deleteFromCart()}}
+            >
+            Delete
         </Button>
         </Card.Content>
     </Card>
     )  
 }
 
-export default Product; 
+export default ProductInCart; 

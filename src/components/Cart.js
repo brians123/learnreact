@@ -11,13 +11,13 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 
 import {CartContext} from './Context';
-import Product from './Product';
+import ProductInCart from './ProductInCart';
 
 
 const Cart = (props) =>{
     const [cart,setCart] = useContext(CartContext);
-    const totalPrice = cart.reduce((acc, curr) => acc + curr.price, 0)
-    const productNames = cart.reduce((acc, curr) => acc + curr.name, ' \n')
+    // const totalPrice = cart.reduce((acc, curr) => acc + curr.price, 0)
+    // const productNames = cart.reduce((acc, curr) => acc + curr.name, ' \n')
 
     const drawerWidth = 240;
     const useStyles = makeStyles((theme) => ({
@@ -82,6 +82,11 @@ const Cart = (props) =>{
     
     const [open, setOpen] = useState(false);
 
+    const deleteFromCart = (index) => () =>{
+        const tempItems = [...cart].filter((s,sidx) => index !== sidx)
+        console.log(tempItems);
+        setCart([...tempItems])
+    }
 
     return (
     <div>
@@ -102,22 +107,22 @@ const Cart = (props) =>{
             </div>
             <Divider />
             <div>{cart.map((product, index)=>(
-                <Product
-                key = {product.sku}
+                <ProductInCart
+                key = {index}
                 sku = {product.sku}
                 // cartStatus={cartStatus}
                 // setCartStatus={setCartStatus}
                 title = {product.title}
                 description = {product.description}
                 price = {product.price}
-                // addToCart = {handleDrawerOpen}
+                deleteFromCart = {deleteFromCart(index)}
                 />))}
                 </div>
             <span>items in cart: {cart.length}</span>
             <br/>
-            <span>total price: {totalPrice} </span>
+            {/* <span>total price: ${totalPrice} </span>
             <br/>
-            <span>names: {productNames} </span>
+            <span>names: {productNames} </span> */}
 
         </Drawer>
         
