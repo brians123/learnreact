@@ -12,23 +12,7 @@ const ProductInCart = (props) => {
     const [cart,setCart] = useContext(CartContext);
 
     const sizes = ['XS','S','M','L']
-
-    // const addToCart = () =>{
-    //     const tshirt = {
-    //         name: props.title, 
-    //         price: props.price,
-            
-    //     }
-    //     setCart(prevState => [...prevState, tshirt])
-        
-    // }
-
-    // const deleteFromCart = (index) => () =>{
-    //     const tempItems = [...cart].filter((s,sidx) => index !== sidx)
-    //     console.log(tempItems);
-    //     setCart(prevCart => ({prevCart, tempItems}))
-    // }
-
+    
     return(
     <Card>
         <Card.Image>

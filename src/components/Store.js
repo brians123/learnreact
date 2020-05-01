@@ -22,7 +22,12 @@ const Store = () =>{
   const [data, setData] = useState({});
   const [open, setOpen] = useState(false);
   const products = Object.values(data);
+  
   const [cartStatus, setCartStatus]=useState(false);
+  const [inventory, setInventory] = useState({});
+  const myInventory = Object.values(inventory);
+  // const sizes = Object.values(myInventory);
+  // console.log(myInventory)
 
  
   const handleDrawerOpen = () => {
@@ -33,6 +38,14 @@ const Store = () =>{
     setOpen(false);
   };
 
+  useEffect(() => {
+    const fetchInventory = async () => {
+      const response = await fetch('./data/inventory.json');
+      const json = await response.json();
+      setInventory(json);
+    };
+    fetchInventory();
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -43,6 +56,7 @@ const Store = () =>{
     fetchProducts();
   }, []);
 
+
   return (
    <div>
       
@@ -51,7 +65,7 @@ const Store = () =>{
     <Navbar.Item href="#">
       <img
         src="https://cdn.businessoffashion.com/brand/bof-logo.svg"
-        alt=""
+        alt="logo"
         role="presentation"
         width="112"
         height="28"
@@ -114,7 +128,9 @@ const Store = () =>{
         description = {product.description}
         price = {product.price}
         addToCart = {handleDrawerOpen}
+        inventory = {inventory}
         />
+        {console.log(inventory)}
         </Column>)}
     </Column.Group>
     </div>)
