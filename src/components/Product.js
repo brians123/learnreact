@@ -7,33 +7,46 @@ import { Card, Image, Media, Title, Content, Button } from "rbx";
 import CartProvider from './Context';
 import {CartContext} from './Context'
 
+const sizes = ['XS','S','M','L']
 
 const Product = (props) => {
+    const [mySize, setMySize]=useState('');
     const [cart,setCart] = useContext(CartContext);
-    const [inventory,setInventory]=useState({});
-    console.log(Object.values(inventory))
+    // console.log(Object.values(inventory))
 
-    const sizes = ['XS','S','M','L']
-
-    const addToCart = () =>{
+    const addToCart = (size) =>{
         const tshirt = {
             name: props.title, 
+            sku: props.sku,
+            size: mySize,
+            // aSize: mysize,
             price: props.price,
         }
         setCart(prevState => [...prevState, tshirt])
+        let newInventory = props.inventory;
+        newInventory[props.sku][size] = newInventory[props.sku][size] - 1;
+        props.setInventory(newInventory)
         
     }
 
- 
-
-
-    console.log(props.inventory[props.sku]);
+    // console.log(props.inventory[props.sku]);
     const inStock = (size)=>{
+        if (props.inventory[props.sku] !== undefined){
+            // console.log(props.inventory);
+            // console.log(props.inventory[props.sku])
+            // console.log(props.inventory[props.sku][size])
+
         return props.inventory[props.sku][size] > 0;
+        }
     }
 
+    const saveMySize = (event) =>{
+        setMySize(event.target.value);
+        console.log(mySize)
+    }
+    // console.log(mySize)
+
     return(
-    
     <Card>
         <Card.Image>
             <Image.Container size="1by0.01">
@@ -59,19 +72,24 @@ const Product = (props) => {
             {sizes.map(size=>
             <Button 
                 disabled={!inStock(size)}
-                rounded >
+                rounded 
+                value={size}
+                onClick = {saveMySize}>
                 {size}
-                {console.log(props.inventory[props.sku]['XS'])}
+                {/* {console.log(props.inventory[props.sku]['S'])} */}
+                {/* {console.log(props.inventory[props.sku][mySize])} */}
             </Button>
             )}
         </Button.Group>
-        <Button
-            onClick = {()=> {props.addToCart(); addToCart()}}>
+        <Button 
+            onClick = {()=> {props.addToCart(); addToCart(mySize)}}>
             Add To Cart
+            
             
         </Button>
         </Card.Content>
     </Card>
+    
     
     )  
 }

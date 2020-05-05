@@ -32,15 +32,6 @@ const ProductInCart = (props) => {
                 </Media.Item>
             </Media>
 
-        {/* <Button.Group >
-            {sizes.map(size=>
-            <Button 
-                rounded >
-                {size}
-            </Button>
-            )}
-        </Button.Group> */}
-
         <Button
             onClick = {()=>{props.deleteFromCart()}}
             >

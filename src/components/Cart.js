@@ -82,10 +82,21 @@ const Cart = (props) =>{
     
     const [open, setOpen] = useState(false);
 
+
     const deleteFromCart = (index) => () =>{
         const tempItems = [...cart].filter((s,sidx) => index !== sidx)
         console.log(tempItems);
         setCart([...tempItems])
+        let newState = Object.assign({}, cart);
+        console.log(newState);
+        console.log(newState[index].sku);
+        const sku = newState[index].sku;
+        const size = newState[index].size;
+        console.log(size)
+        console.log(sku);
+        let newInventory = props.inventory;
+        newInventory[sku][size] += 1;
+        props.setInventory(newInventory);
     }
 
     return (
