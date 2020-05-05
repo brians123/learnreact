@@ -44,7 +44,6 @@ const Product = (props) => {
         setMySize(event.target.value);
         console.log(mySize)
     }
-    // console.log(mySize)
 
     return(
     <Card>

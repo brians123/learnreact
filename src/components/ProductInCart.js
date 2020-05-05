@@ -10,6 +10,8 @@ import {CartContext} from './Context'
 
 const ProductInCart = (props) => {
     const [cart,setCart] = useContext(CartContext);
+    // let newState = Object.assign({}, cart);
+    
 
     const sizes = ['XS','S','M','L']
     
@@ -28,6 +30,9 @@ const ProductInCart = (props) => {
                 </Title>
                 <Title as="p" subtitle size={6}>
                     ${props.price}
+                </Title>
+                <Title as="p" size={6}>
+                    Size: {props.size}
                 </Title>
                 </Media.Item>
             </Media>

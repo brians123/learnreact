@@ -16,8 +16,7 @@ import ProductInCart from './ProductInCart';
 
 const Cart = (props) =>{
     const [cart,setCart] = useContext(CartContext);
-    // const totalPrice = cart.reduce((acc, curr) => acc + curr.price, 0)
-    // const productNames = cart.reduce((acc, curr) => acc + curr.name, ' \n')
+    const totalPrice = cart.reduce((acc, curr) => acc + curr.price, 0)
 
     const drawerWidth = 240;
     const useStyles = makeStyles((theme) => ({
@@ -127,13 +126,12 @@ const Cart = (props) =>{
                 description = {product.description}
                 price = {product.price}
                 deleteFromCart = {deleteFromCart(index)}
+                size = {cart[index].size}
                 />))}
                 </div>
-            <span>items in cart: {cart.length}</span>
-            <br/>
-            {/* <span>total price: ${totalPrice} </span>
-            <br/>
-            <span>names: {productNames} </span> */}
+            <span>No. of Items: {cart.length}</span>
+            <span>Total: ${totalPrice} </span>
+
 
         </Drawer>
         
