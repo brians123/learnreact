@@ -7,12 +7,18 @@ import {CartContext} from './components/Context'
 import Store from './components/Store';
 
 
+// rbx styling
+import "rbx/index.css";
+
+
+
+
 const App = () => {
   return(
   <CartProvider>
     <Store>
 
-    </Store>
+    </Store> 
   </CartProvider>)
   
 };

@@ -8,14 +8,19 @@ import React, { useEffect, useState, useContext } from 'react';
 // rbx styling
 import "rbx/index.css";
 import { Navbar, Button, Column} from "rbx";
+import { Message } from 'rbx';
+
 
 
 // Material UI
 import IconButton from '@material-ui/core/IconButton';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 
+// Firebase 
 import firebase from 'firebase/app';
 import 'firebase/database';
+import 'firebase/auth';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 var firebaseConfig = {
   apiKey: "AIzaSyAyFTsJYPUIc3tcerqB8fDeJ5LA_7fSxrY",
@@ -31,26 +36,57 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database().ref();
 
 
+const uiConfig = {
+  signInFlow: 'popup',
+  signInOptions: [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID
+  ],
+  callbacks: {
+    signInSuccessWithAuthResult: () => false
+  }
+};
 
 const Store = () =>{
   
   const [data, setData] = useState({});
   const [open, setOpen] = useState(false);
   const products = Object.values(data);
-  
   const [cartStatus, setCartStatus]=useState(false);
   const [inventory, setInventory] = useState({});
-  
+  const [user, setUser] = useState(null);
+
+  const SignIn = ({ user }) => {
+    if (user){
+      console.log('VALID')
+      return(
+        <div className='.log-in-info'>
+        <div>
+          HI {user.displayName}
+        </div>
+        <Button primary onClick={() => firebase.auth().signOut()}>
+         Log out
+        </Button>
+        </div>)
+    }
+    else{
+      console.log('INVALID')
+      return(
+    <StyledFirebaseAuth
+      uiConfig={uiConfig}
+      firebaseAuth={firebase.auth()}
+    />)}
+  };
+
 
    useEffect(() => {
-
     const handleData = snap => {
-    
       if (snap.val()) setInventory(snap.val().inventory)
     }
     db.on('value', handleData, error => alert(error));
     return () => { db.off('value', handleData); };
   }, []);
+
+  
 
  
   const handleDrawerOpen = () => {
@@ -61,6 +97,9 @@ const Store = () =>{
     setOpen(false);
   };
   
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(setUser);
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -70,12 +109,13 @@ const Store = () =>{
     };
     fetchProducts();
   }, []);
-  
 
-  return (
-    (inventory === null) ? null : 
-   <div>
-      
+
+
+  return(
+    
+     <div>
+       {/* <Welcome user={user} /> */}
      <Navbar color="light">
      <Navbar.Brand>
     <Navbar.Item href="#">
@@ -108,11 +148,16 @@ const Store = () =>{
 
     <Navbar.Segment align="end">
       <Navbar.Item>
+      
         <Button.Group>
-          <Button color="dark">
+          
+          {/* <Button color="dark">
             <strong>Sign up</strong>
-          </Button>
-          <Button color="light">Log in</Button>
+          </Button> */}
+          <SignIn
+            user={user}
+          />
+          {/* <Button color="light">Log in</Button> */}
         </Button.Group>
       </Navbar.Item>
     </Navbar.Segment>
@@ -136,7 +181,7 @@ const Store = () =>{
 
       {products.map(product => 
         <Column 
-          key={product}
+          key={product.sku}
           size="one-quarter">
             
         <Product
