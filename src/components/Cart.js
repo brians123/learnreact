@@ -8,15 +8,27 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import {  Button}  from "rbx";
 
 
 import {CartContext} from './Context';
 import ProductInCart from './ProductInCart';
 
 
+import firebase from 'firebase/app';
+import 'firebase/database';
+
+import 'firebase/auth';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+
+
 const Cart = (props) =>{
     const [cart,setCart] = useContext(CartContext);
     const totalPrice = cart.reduce((acc, curr) => acc + curr.price, 0)
+
+    const handleCheckout = () => {
+        setCart([])
+      };
 
     const drawerWidth = 240;
     const useStyles = makeStyles((theme) => ({
@@ -84,18 +96,28 @@ const Cart = (props) =>{
 
     const deleteFromCart = (index) => () =>{
         const tempItems = [...cart].filter((s,sidx) => index !== sidx)
-        console.log(tempItems);
+        // console.log(tempItems);
         setCart([...tempItems])
         let newState = Object.assign({}, cart);
-        console.log(newState);
-        console.log(newState[index].sku);
+        // console.log(newState);
+        // console.log(newState[index].sku);
         const sku = newState[index].sku;
         const size = newState[index].size;
-        console.log(size)
-        console.log(sku);
+        // console.log(size)
+        // console.log(sku);
         let newInventory = props.inventory;
         newInventory[sku][size] += 1;
         props.setInventory(newInventory);
+
+        if (props.userState.user){
+            if (cart.length === 1){
+                console.log("in here");
+                firebase.database().ref('carts/' + props.userState.user.uid).remove();
+            }
+            else{
+                firebase.database().ref('carts/' + props.userState.user.uid).set(cart); 
+            }
+        }
     }
 
     return (
@@ -127,10 +149,14 @@ const Cart = (props) =>{
                 price = {product.price}
                 deleteFromCart = {deleteFromCart(index)}
                 size = {cart[index].size}
+                userState={props.userState}
                 />))}
                 </div>
             <span>No. of Items: {cart.length}</span>
             <span>Total: ${totalPrice} </span>
+            <Button onClick={handleCheckout}>
+                CHECKOUT
+            </Button>
 
 
         </Drawer>

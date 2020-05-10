@@ -7,6 +7,14 @@ import { Card, Image, Media, Title, Content, Button } from "rbx";
 import CartProvider from './Context';
 import {CartContext} from './Context'
 
+
+import firebase from 'firebase/app';
+import 'firebase/database';
+
+import 'firebase/auth';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+
+
 const sizes = ['XS','S','M','L']
 
 const Product = (props) => {
@@ -26,6 +34,10 @@ const Product = (props) => {
         let newInventory = props.inventory;
         newInventory[props.sku][size] = newInventory[props.sku][size] - 1;
         props.setInventory(newInventory)
+
+        if (props.userState.user){
+            firebase.database().ref('carts/' + props.userState.user.uid).set(cart)
+        }
         
     }
 

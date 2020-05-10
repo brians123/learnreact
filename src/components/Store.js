@@ -4,6 +4,7 @@ import Cart from './Cart';
 
 import React, { useEffect, useState, useContext } from 'react';
 
+import '../App.css';
 
 // rbx styling
 import "rbx/index.css";
@@ -59,13 +60,13 @@ const Store = () =>{
     if (user){
       console.log('VALID')
       return(
-        <div className='.log-in-info'>
-        <div>
-          HI {user.displayName}
-        </div>
-        <Button primary onClick={() => firebase.auth().signOut()}>
-         Log out
-        </Button>
+        <div style={{display:'flex' }}>
+          <div style={{margin:10}}>
+            Welcome, {user.displayName}
+          </div>
+          <Button primary onClick={() => firebase.auth().signOut()}>
+          Log out
+          </Button>
         </div>)
     }
     else{
@@ -174,6 +175,7 @@ const Store = () =>{
         setClose={handleDrawerClose}
         inventory={inventory}
         setInventory={setInventory}
+        userState = {{user,setUser}}
     />
 
     
@@ -193,7 +195,7 @@ const Store = () =>{
           addToCart = {handleDrawerOpen}
           inventory = {inventory}
           setInventory = {setInventory}
-          // saveMySize = {saveMySize}
+          userState = {{user, setUser}}
         />
         {console.log(inventory)}
         </Column>)}
